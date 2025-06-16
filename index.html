@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Matrix Love Horizontal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <style>
     * {
       user-select: none;
@@ -27,7 +26,7 @@
 <body>
 <canvas id="matrix" tabindex="-1"></canvas>
 
-<!-- Audio de fondo -->
+<!-- 🎵 Audio local -->
 <audio id="loveAudio" src="amor.mp3" preload="auto"></audio>
 
 <script>
@@ -40,17 +39,19 @@
     canvas.height = window.innerHeight;
   }
 
+  
+
   resizeCanvas();
 
   const phrase = "My Love";
-  const fontSize = 32; // Letras más grandes
-  ctx.font = `${fontSize}px 'Courier New'`;
+  const fontSize = 32;
   const columnWidth = ctx.measureText(phrase).width + 10;
   const columns = Math.floor(canvas.width / columnWidth);
+
   const drops = Array(columns).fill(0);
 
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.06)";
+    ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = "#ff00aa";
@@ -62,7 +63,7 @@
 
       ctx.fillText(phrase, x, y);
 
-      if (y > canvas.height && Math.random() > 0.99) { // más lenta
+      if (y > canvas.height && Math.random() > 0.975) {
         drops[i] = 0;
       }
 
@@ -72,13 +73,13 @@
     drawExplosions();
   }
 
-  setInterval(draw, 60);
+  setInterval(draw, 50);
 
   window.addEventListener("resize", () => {
     resizeCanvas();
   });
 
-  // Palabras que salpican
+  // Splash efecto
   const splashWords = [];
 
   function drawExplosions() {
@@ -103,19 +104,22 @@
   }
 
   function splashAt(x, y) {
+    // 🔊 Reproducir canción solo si no está sonando
     if (audio.paused) {
-      audio.play().catch(err => console.warn("No se pudo reproducir audio:", err));
+      audio.play().catch(err => {
+        console.warn("Audio no pudo reproducirse:", err);
+      });
     }
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 2;
+      const speed = 2 + Math.random() * 3;
       splashWords.push({
         x: x,
         y: y,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: 20 + Math.random() * 8,
+        size: 16 + Math.random() * 10,
         opacity: 1
       });
     }
